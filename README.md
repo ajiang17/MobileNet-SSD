@@ -37,3 +37,17 @@ I trained this model from a MobileNet classifier([caffemodel](https://drive.goog
 
 ### Mobile Platform
 You can run it on Android with my another project [rscnn](https://github.com/chuanqi305/rscnn).
+
+
+======================
+-------------------------------
+从新训练mobilenet-ssd模型
+1.不要用gen_model.sh生成的MobileNetSSD_deploy.prototxt和MobileNetSSD_test.prototxt， 这两个文件跟我们的MobileNetSSD_deploy.caffemodel(已经在用的,mAP：54.48%)有一些层名称不一样。
+
+2.finetune的模型用自带的mobilenet_iter_73000.caffemodel， 这个是带bn层的，不要用我们的MobileNetSSD_deploy.caffemodel，这个是去掉了bn层的，不能用来重训练或者说最好不要用来重训练（训练的prototxt要去掉bn层，这样不好）
+
+3.不带bn层的模型和deploy，相应的demo.py中要同时替换原先的netfile和weights文件
+root@88dc478cc057:/home/root_work/MobileNet-SSD-new-szj/MobileNet-SSD# python merge_bn.py --model deploy.prototxt   --weights   snapshot/MobileNetSSD_iter_100.caffemodel 
+
+带bn层的话，demo.py中的netfile 用deploy.prototxt, 模型用直接生成的。
+
